@@ -54,9 +54,10 @@ export function JoinPartyForm() {
       toast({ title: "Joined party!", description: `Waiting for host to start.` })
       router.push(`/lobby/${upperCode}`)
 
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
       console.error(error)
-      toast({ title: "Error joining party", description: error.message, variant: "destructive" })
+      toast({ title: "Error joining party", description: errorMessage, variant: "destructive" })
     } finally {
       setLoading(false)
     }
