@@ -73,7 +73,9 @@ new_subscriptions = """    // Combine subscriptions into a single channel with a
     }"""
 
 # Need to escape special characters for re.sub or just use str.replace
-content = content.replace(old_subscriptions, new_subscriptions)
+if old_subscriptions not in content:
+    raise RuntimeError("Expected subscriptions block not found in src/app/lobby/[code]/page.tsx")
+content = content.replace(old_subscriptions, new_subscriptions, 1)
 
 with open("src/app/lobby/[code]/page.tsx", "w") as f:
     f.write(content)
