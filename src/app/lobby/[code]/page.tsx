@@ -52,7 +52,7 @@ export default function Lobby({ params }: { params: { code: string } }) {
 
     // Combine subscriptions into a single channel with a unique name to avoid conflicts during React Strict Mode re-mounts
     const channel = supabase
-      .channel(`party_${party.id}_${Math.random().toString(36).substring(7)}`)
+      .channel(`party_${party.id}_lobby`)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
