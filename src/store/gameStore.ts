@@ -43,6 +43,7 @@ interface GameState {
   setPlayer: (player: Player) => void;
   setParty: (party: Party) => void;
   setPlayers: (players: Player[]) => void;
+  addPlayer: (player: Player) => boolean;
   setCurrentRound: (round: Round) => void;
   setGuesses: (guesses: Guess[]) => void;
   resetGame: () => void;
@@ -57,6 +58,17 @@ export const useGameStore = create<GameState>((set) => ({
   setPlayer: (player) => set({ player }),
   setParty: (party) => set({ party }),
   setPlayers: (players) => set({ players }),
+  addPlayer: (player) => {
+    let added = false;
+    set((state) => {
+      if (state.players.some(p => p.id === player.id)) {
+        return { players: state.players };
+      }
+      added = true;
+      return { players: [...state.players, player] };
+    });
+    return added;
+  },
   setCurrentRound: (round) => set({ currentRound: round }),
   setGuesses: (guesses) => set({ guesses }),
   resetGame: () => set({ player: null, party: null, players: [], currentRound: null, guesses: [] })
