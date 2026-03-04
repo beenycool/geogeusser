@@ -61,7 +61,7 @@ export default function Results({ params }: { params: { code: string } }) {
 
       if (!playersError && updatedPlayers) {
         setPlayers(updatedPlayers as Player[])
-        const updatedMe = updatedPlayers.find((p: any) => p.id === player?.id)
+        const updatedMe = updatedPlayers.find((p: Player) => p.id === player?.id)
         if (updatedMe) setPlayer(updatedMe as Player)
       }
 
