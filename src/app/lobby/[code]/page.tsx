@@ -50,23 +50,18 @@ export default function Lobby({ params }: { params: { code: string } }) {
 
     fetchPlayers()
 
-    // Subscribe to new players joining
-    const playerSubscription = supabase
-      .channel(`party_${party.id}_players`)
+    // Combine subscriptions into a single channel with a unique name to avoid conflicts during React Strict Mode re-mounts
+    const channel = supabase
+      .channel(`party_${party.id}_${Math.random().toString(36).substring(7)}`)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
         table: 'players',
         filter: `party_id=eq.${party.id}`
       }, payload => {
-        setPlayers([...useGameStore.getState().players, payload.new as Player])
+        useGameStore.getState().addPlayer(payload.new as Player)
         toast({ title: `${payload.new.nickname} joined the party!` })
       })
-      .subscribe()
-
-    // Subscribe to party status changes (game starting)
-    const partySubscription = supabase
-      .channel(`party_${party.id}_status`)
       .on('postgres_changes', {
         event: 'UPDATE',
         schema: 'public',
@@ -83,8 +78,7 @@ export default function Lobby({ params }: { params: { code: string } }) {
       .subscribe()
 
     return () => {
-      supabase.removeChannel(playerSubscription)
-      supabase.removeChannel(partySubscription)
+      supabase.removeChannel(channel)
     }
   }, [party, partyCode, router, setParty, setPlayers, toast])
 
