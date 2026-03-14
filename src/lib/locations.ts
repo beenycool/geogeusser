@@ -39,6 +39,13 @@ export const PRE_CURATED_LOCATIONS: Location[] = [
 ];
 
 export function getRandomLocations(count: number): Location[] {
-  const shuffled = [...PRE_CURATED_LOCATIONS].sort(() => 0.5 - Math.random());
+  const shuffled = [...PRE_CURATED_LOCATIONS];
+  // Fisher-Yates (Durstenfeld) algorithm for uniform distribution
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const array = new Uint32Array(1);
+    globalThis.crypto.getRandomValues(array);
+    const j = array[0] % (i + 1);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
   return shuffled.slice(0, count);
 }

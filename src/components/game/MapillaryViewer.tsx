@@ -17,7 +17,7 @@ export function MapillaryViewer({ imageId }: MapillaryViewerProps) {
 
     if (!viewerRef.current) {
       viewerRef.current = new Viewer({
-        accessToken: 'MLY|9009855529068598|0b47d3c01c0c6c1e550e203023812845', // Standard public client token for testing
+        accessToken: process.env.NEXT_PUBLIC_MAPILLARY_CLIENT_TOKEN || 'MLY|9009855529068598|0b47d3c01c0c6c1e550e203023812845',
         container: containerRef.current,
         imageId: imageId,
         component: { cover: false, sequence: true, direction: true },
