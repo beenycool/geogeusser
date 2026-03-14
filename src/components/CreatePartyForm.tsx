@@ -18,7 +18,12 @@ export function CreatePartyForm() {
   const setPlayer = useGameStore(state => state.setPlayer)
   const setParty = useGameStore(state => state.setParty)
 
-  const generateCode = () => Math.random().toString(36).substring(2, 8).toUpperCase()
+  const generateCode = () => {
+    const array = new Uint32Array(1);
+    globalThis.crypto.getRandomValues(array);
+    // Convert to base36 and take first 6 chars, padding if necessary
+    return array[0].toString(36).padStart(6, '0').substring(0, 6).toUpperCase();
+  }
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
