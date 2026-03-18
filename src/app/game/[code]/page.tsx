@@ -162,9 +162,9 @@ export default function Game({ params }: { params: { code: string } }) {
 
       toast({ title: "Guess submitted!", description: `Waiting for ${players.length - guesses.length - 1} other players...` })
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error)
-      toast({ title: "Failed to submit guess", description: error.message, variant: "destructive" })
+      toast({ title: "Failed to submit guess", description: error instanceof Error ? error.message : 'An unknown error occurred', variant: "destructive" })
       setHasGuessed(false)
     }
   }
